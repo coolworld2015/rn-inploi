@@ -39,8 +39,7 @@ class SearchTrack extends Component {
 			showProgress: true,
 			resultsCount: 0,
 			recordsCount: 15,
-			positionY: 0,
-			refreshing: false
+			positionY: 0
 		}	
     }
 	
@@ -59,12 +58,9 @@ class SearchTrack extends Component {
             positionY: 0,
 			searchQuery: ''
         });
- 
 		
-        //fetch('https://itunes.apple.com/search?media=movie&term='
-        //    + this.state.searchQueryHttp, {        
-			
-		fetch(appConfig.url + 'jobs?token=' + appConfig.access_token, {
+        fetch('https://itunes.apple.com/search?media=movie&term='
+            + this.state.searchQueryHttp, {
             method: 'get',
             headers: {
                 'Accept': 'application/json',
@@ -73,12 +69,11 @@ class SearchTrack extends Component {
         })
             .then((response)=> response.json())
             .then((responseData)=> {
-				console.log(responseData.browse)
                 this.setState({
-                    dataSource: this.state.dataSource.cloneWithRows(responseData.browse.slice(0, 15)),
-                    resultsCount: responseData.browse.length,
-                    responseData: responseData.browse,
-                    filteredItems: responseData.browse,
+                    dataSource: this.state.dataSource.cloneWithRows(responseData.results.slice(0, 15)),
+                    resultsCount: responseData.results.length,
+                    responseData: responseData.results,
+                    filteredItems: responseData.results,
 					refreshing: false
                 });
             })
@@ -119,27 +114,26 @@ class SearchTrack extends Component {
                 underlayColor='#ddd'
             >
                 <View style={styles.imgsList}>
-                     <Image
-                        source={{uri: 'https://res.cloudinary.com/chris-mackie/image/upload/' + rowData.company_img}}
+                    <Image
+                        source={{uri: rowData.artworkUrl100.replace('100x100bb.jpg', '500x500bb.jpg')}}
                         style={styles.img}
                     />
                     <View style={styles.textBlock}>
                         <Text style={styles.textItemBold}>
-							{rowData.role}
+							{rowData.trackName}
 						</Text>
- 						
-                        <Text style={styles.textItemBold}>
-							{rowData.rate}
-						</Text>
-						
                         <Text style={styles.textItem}>
-							{rowData.posted}
-						</Text> 
-						
-                        <Text style={styles.textItem}>
-							{rowData.experience}
+							{rowData.releaseDate.split('-')[0]}
 						</Text>
- 
+                        <Text style={styles.textItem}>
+							{rowData.country}
+						</Text>
+                        <Text style={styles.textItem}>
+							{rowData.primaryGenreName}
+						</Text>
+                        <Text style={styles.textItem}>
+							{rowData.artistName}
+						</Text>
                     </View>
                 </View>
             </TouchableHighlight>
@@ -174,7 +168,7 @@ class SearchTrack extends Component {
             return;
         }
         var arr = [].concat(this.state.responseData);
-        var items = arr.filter((el) => el.role.toLowerCase().indexOf(text.toLowerCase()) >= 0);
+        var items = arr.filter((el) => el.trackName.toLowerCase().indexOf(text.toLowerCase()) >= 0);
         this.setState({
             dataSource: this.state.dataSource.cloneWithRows(items),
             resultsCount: items.length,

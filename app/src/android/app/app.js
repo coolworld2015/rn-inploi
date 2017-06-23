@@ -7,6 +7,7 @@ import {
 
 console.disableYellowBox = true;
 
+import Login from './login';
 import AppContainer from './appContainer';
 
 class App extends Component {
@@ -19,19 +20,44 @@ class App extends Component {
 			}
 			return true;
 		});
+		
+        this.state = {
+            isLoggedIn: false
+        };
 
         window.appConfig = {
             access_token: '',
-            movies: {
+			url: 'https://test.inploi.me/',
+			onLogOut: this.onLogOut.bind(this),
+			users: {
                 refresh: false
-            }
+            },
+			phones: {
+                refresh: false
+            }	
         };		
     }
 
     render() {
-		return (
-			<AppContainer />
-		)
+        if (this.state.isLoggedIn) {
+            return (
+                <AppContainer />
+            )
+        } else {
+            return (
+                <Login onLogin={this.onLogin.bind(this)}/>
+            )
+        }
+    }
+
+    onLogin() {
+        console.log('onLogin');
+        this.setState({isLoggedIn: true});
+    }
+
+    onLogOut() {
+        console.log('onLogOut');
+        this.setState({isLoggedIn: false});
     }
 }
 

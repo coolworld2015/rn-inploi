@@ -1,0 +1,17 @@
+https://test.inploi.me/token
+
+client_id = anton.osypa@daxx-staffing.com
+client_secret = dk5j4uafcF9dabEIpjjbOPTP
+grant_type = client_credentials
+
+{
+    "access_token": "40e709b657bc8c7bbd75a4fd3379d8b016f975d9",
+    "expires_in": 3600,
+    "token_type": "Bearer",
+    "scope": null
+}
+
+https://test.inploi.me/jobs?token=40e709b657bc8c7bbd75a4fd3379d8b016f975d9
+https://test.inploi.me/jobs/2?token=40e709b657bc8c7bbd75a4fd3379d8b016f975d9
+
+https://res.cloudinary.com/chris-mackie/image/upload/profile_10604-avatar
