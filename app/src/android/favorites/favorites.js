@@ -76,7 +76,7 @@ class Movies extends Component {
 			searchQuery: ''
         });
 		
-        AsyncStorage.getItem('rn-wikr.posts')
+        AsyncStorage.getItem('rn-inploi.jobs')
             .then(req => JSON.parse(req))
             .then(json => {
 				if (json) {
@@ -98,7 +98,7 @@ class Movies extends Component {
     }
 
     sort(a, b) {
-        var nameA = a.name.toLowerCase(), nameB = b.name.toLowerCase();
+        var nameA = a.role.toLowerCase(), nameB = b.role.toLowerCase();
         if (nameA < nameB) {
             return -1
         }
@@ -111,13 +111,16 @@ class Movies extends Component {
     pressRow(rowData) {
 		let data = {
 			trackId: rowData.trackId,
-			name: rowData.name,
-			date: rowData.date,
 			image: rowData.image,
-			artist: rowData.artist,
-			album: rowData.album,
-			duration: rowData.duration,
-			url: rowData.url
+			role: rowData.role,
+			company: rowData.company,
+			job_term: rowData.job_term,
+			company_type: rowData.company_type,
+			location_city: rowData.location_city.trim(),
+			rate: rowData.rate,
+			
+			date: rowData.date,
+			full_description: rowData.full_description
 		};
 		
 		this.props.navigator.push({
@@ -127,12 +130,12 @@ class Movies extends Component {
     }
 
     renderRow(rowData) {
-		var image;
- 
-		image = <Image
-			source={{uri: rowData.image}}
-			style={styles.img}
-		/>
+		let job_term;
+		if (rowData.job_term == 'ft') {
+            job_term = 'Full-Time';
+        } else {
+			job_term = 'Part-Time';
+		}
 		
         return (
             <TouchableHighlight
@@ -140,18 +143,34 @@ class Movies extends Component {
                 underlayColor='#ddd'
             >
                 <View style={styles.imgsList}>
- 
-					{image}
- 
+                     <Image
+                        source={{uri: rowData.image}}
+                        style={styles.img}
+                    />
                     <View style={styles.textBlock}>
                         <Text style={styles.textItemBold}>
-							{rowData.name}
-						</Text>                           
-						
-						<Text style={styles.textItemBold}>
-							{rowData.date}
-						</Text>                        
+							{rowData.role}
+						</Text>
+ 												
+                        <Text style={styles.textItemBig}>
+							{rowData.company}
+						</Text> 
 
+                        <Text style={styles.textItem}>
+							{job_term}
+						</Text>
+						
+                        <Text style={styles.textItem}>
+							{rowData.company_type}
+						</Text>
+ 						
+                        <Text style={styles.textItem}>
+							{rowData.location_city.trim()}
+						</Text> 
+												
+                        <Text style={styles.textItemBold}>
+							£{rowData.rate}
+						</Text>
                     </View>
                 </View>
             </TouchableHighlight>
@@ -185,8 +204,8 @@ class Movies extends Component {
         if (this.state.responseData == undefined) {
             return;
         }
-        var arr = [].concat(this.state.responseData);
-        var items = arr.filter((el) => el.name.toLowerCase().indexOf(text.toLowerCase()) >= 0);
+        let arr = [].concat(this.state.responseData);
+        let items = arr.filter((el) => el.role.toLowerCase().indexOf(text.toLowerCase()) >= 0);
         this.setState({
             dataSource: this.state.dataSource.cloneWithRows(items),
             resultsCount: items.length,
@@ -229,6 +248,7 @@ class Movies extends Component {
             loader = <View style={styles.loader}>
                 <ActivityIndicator
                     size="large"
+					color="#E25057"
                     animating={true}
                 />
             </View>;
@@ -263,7 +283,7 @@ class Movies extends Component {
 							underlayColor='#ddd'
 						>
 							<Text style={styles.textLarge}>
-								Favorites
+								Applied
 							</Text>
 						</TouchableHighlight>	
 					</View>						
@@ -356,7 +376,8 @@ const styles = StyleSheet.create({
     },
 	iconForm: {
 		flexDirection: 'row',
-		borderColor: 'lightgray',
+		//borderColor: 'lightgray',
+		borderColor: '#E25057',
 		borderWidth: 3
 	},
     countHeader: {
@@ -366,8 +387,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#F5FCFF',
     },
     img: {
-        height: 95,
-        width: 90,
+        height: 110,
+        width: 110,
         borderRadius: 10,
         margin: 10
     },    
@@ -391,7 +412,8 @@ const styles = StyleSheet.create({
 	header: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		backgroundColor: '#48BBEC',
+		//backgroundColor: '#48BBEC',
+		backgroundColor: '#E25057',
 		borderWidth: 0,
 		borderColor: 'whitesmoke'
 	},	
@@ -438,7 +460,8 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         padding: 10,
         borderColor: '#D7D7D7',
-        backgroundColor: '#48BBEC',
+        //backgroundColor: '#48BBEC',
+        backgroundColor: '#E25057',
 		color: 'white',
 		fontWeight: 'bold'
     },

@@ -186,8 +186,8 @@ class SearchTrack extends Component {
         if (this.state.responseData == undefined) {
             return;
         }
-        var arr = [].concat(this.state.responseData);
-        var items = arr.filter((el) => el.role.toLowerCase().indexOf(text.toLowerCase()) >= 0);
+        let arr = [].concat(this.state.responseData);
+        let items = arr.filter((el) => el.role.toLowerCase().indexOf(text.toLowerCase()) >= 0);
         this.setState({
             dataSource: this.state.dataSource.cloneWithRows(items),
             resultsCount: items.length,
@@ -363,6 +363,7 @@ const styles = StyleSheet.create({
     },
 	iconForm: {
 		flexDirection: 'row',
+		//borderColor: 'lightgray',
 		borderColor: '#E25057',
 		borderWidth: 3
 	},

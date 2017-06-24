@@ -55,26 +55,28 @@ class SearchDetails extends Component {
 	addItem() {
         let movies = [];
 
-        AsyncStorage.getItem('rn-wikr.posts')
+        AsyncStorage.getItem('rn-inploi.jobs')
             .then(req => JSON.parse(req))
             .then(json => {
                 movies = [].concat(json);
                 movies.push({
 					trackId: + new Date,
-					name: this.state.name,
-					date: this.state.date,
 					image: this.state.image,
-					artist: this.state.artist,
-					album: this.state.album,
-					duration: this.state.duration,
-					url: this.state.url
+					role: this.state.role,
+					date: this.state.date,
+					company: this.state.company,
+					job_term: this.state.job_term,
+					company_type: this.state.company_type,
+					location_city: this.state.location_city,
+					rate: this.state.rate,
+					full_description: this.state.full_description
 				});
 
                 if (movies[0] == null) {
                     movies.shift()
                 } // Hack !!!
 
-                AsyncStorage.setItem('rn-wikr.posts', JSON.stringify(movies))
+                AsyncStorage.setItem('rn-inploi.jobs', JSON.stringify(movies))
                     .then(json => {
                             appConfig.movies.refresh = true;
                             this.props.navigator.pop();
@@ -99,7 +101,7 @@ class SearchDetails extends Component {
 	}
 	
     render() {
-        var image = <View />;
+        var image;
  
 		image = <Image
 			source={{uri: this.state.image}}

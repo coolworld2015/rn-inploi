@@ -27,31 +27,29 @@ class MoviesDetails extends Component {
 		});	
 		
 		this.state = {
-			name: '',
-			date: '',
-			artist: '',
-			album: '',
-			duration: ''
+			role: ''
 		};
 		
 		if (props.data) {
 			this.state = {
 				trackId: props.data.trackId,
-				name: props.data.name,
-				date: props.data.date,
 				image: props.data.image,
-				artist: props.data.artist,
-				album: props.data.album,
-				duration: props.data.duration,
-				url: props.data.url
+				role: props.data.role,
+				date: props.data.date,
+				company: props.data.company,
+				job_term: props.data.job_term,
+				company_type: props.data.company_type,
+				location_city: props.data.location_city,
+				rate: props.data.rate,
+				full_description: props.data.full_description
 			};
 		}	
     }
 	
     deleteMovieDialog() {
 		Alert.alert(
-			'Delete post',
-			'Are you sure you want to delete post ' + this.state.name + '?',
+			'Delete job',
+			'Are you sure you want to delete job ' + this.state.role + '?',
 			[
 				{text: 'Cancel', onPress: () => console.log('Cancel Pressed!')},
 				{
@@ -67,7 +65,7 @@ class MoviesDetails extends Component {
 		var id = this.state.trackId;
 		var movies = [];
 
-		AsyncStorage.getItem('rn-wikr.posts')
+		AsyncStorage.getItem('rn-inploi.jobs')
 			.then(req => JSON.parse(req))
 			.then(json => {
 
@@ -80,7 +78,7 @@ class MoviesDetails extends Component {
 					}
 				}
 
-				AsyncStorage.setItem('rn-wikr.posts', JSON.stringify(movies))
+				AsyncStorage.setItem('rn-inploi.jobs', JSON.stringify(movies))
 					.then(json => {
 							appConfig.movies.refresh = true;
 							this.props.navigator.pop();
@@ -105,7 +103,7 @@ class MoviesDetails extends Component {
 	}
 	
     render() {
-        var image = <View />;
+        var image;
  
 		image = <Image
 			source={{uri: this.state.image}}
@@ -123,7 +121,7 @@ class MoviesDetails extends Component {
 					<View>
 						<TouchableHighlight
 							onPress={()=> this.goBack()}
-							underlayColor='#48BBEC'
+							underlayColor='#E25057'
 						>
 							<Text style={styles.textSmall}>
 								Back
@@ -135,14 +133,14 @@ class MoviesDetails extends Component {
 							underlayColor='#ddd'
 						>
 							<Text style={styles.textLarge}>
-								{this.state.name}
+								{this.state.company}
 							</Text>
 						</TouchableHighlight>	
 					</View>						
 					<View>
 						<TouchableHighlight
 							onPress={()=> this.deleteMovieDialog()}
-							underlayColor='#48BBEC'
+							underlayColor='#E25057'
 						>
 							<Text style={styles.textSmall}>
 								Delete
@@ -166,20 +164,36 @@ class MoviesDetails extends Component {
 					</View>
 					 
 						<Text style={styles.itemTextBold}>
-							{this.state.name}
+							{this.state.company}
 						</Text>
+						
+						<Text style={styles.itemTextBig}>
+							{this.state.role}
+						</Text>				
+						
+						<Text style={styles.itemText}>
+							{this.state.job_term}
+						</Text>				
+						
+						<Text style={styles.itemText}>
+							{this.state.company_type}
+						</Text>						
+						
+						<Text style={styles.itemText}>
+							{this.state.location_city}
+						</Text>				
+						
+						<Text style={styles.itemText}>
+							{this.state.date}
+						</Text>						
 						
 						<Text style={styles.itemTextBold}>
-							{this.state.date}
+							£{this.state.rate}
 						</Text>
 						
-						<TouchableHighlight
-							onPress={()=> this.playTrack()}
-							style={styles.button}>
-							<Text style={styles.buttonText}>
-								Show post
-							</Text>
-						</TouchableHighlight>
+						<Text style={styles.itemTextDescription}>
+							{this.state.full_description}
+						</Text>				
 						
 					</View>
 				</ScrollView>
@@ -197,7 +211,8 @@ const styles = StyleSheet.create({
 	header: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		backgroundColor: '#48BBEC',
+		//backgroundColor: '#48BBEC',
+		backgroundColor: '#E25057',
 		borderWidth: 0,
 		borderColor: 'whitesmoke'
 	},	
@@ -234,17 +249,30 @@ const styles = StyleSheet.create({
         margin: 5,
         fontWeight: 'bold',
 		color: 'black'
-    },  
-	itemText: {
+    },
+	itemTextBig: {
+		fontSize: 18,
+		marginBottom: 5,
+		textAlign: 'center',
+		color: 'black'
+    },	
+    itemText: {
         fontSize: 14,
         textAlign: 'center',
-        margin: 3,
+        margin: 1,
+        color: 'black'
+    },    
+	itemTextDescription: {
+        fontSize: 14,
+        textAlign: 'left',
+        margin: 5,
         marginLeft: 2,
         color: 'black'
     },
     button: {
         height: 50,
-        backgroundColor: '#48BBEC',
+        //backgroundColor: '#48BBEC',
+        backgroundColor: '#E25057',
         borderColor: '#48BBEC',
         alignSelf: 'stretch',
         marginTop: 10,
