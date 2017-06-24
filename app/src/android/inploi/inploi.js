@@ -38,7 +38,7 @@ class SearchTrack extends Component {
 			searchQuery: '',
 			showProgress: true,
 			resultsCount: 0,
-			recordsCount: 15,
+			recordsCount: 10,
 			positionY: 0,
 			refreshing: false
 		}	
@@ -48,14 +48,15 @@ class SearchTrack extends Component {
 		this.setState({
             width: Dimensions.get('window').width
         });
-        this.getItems();
+        //this.getItems();
+        this.getAllItems();
     }
 	
     getItems() {
 		this.setState({
 			serverError: false,
             resultsCount: 0,
-            recordsCount: 15,
+            recordsCount: 10,
             positionY: 0,
 			searchQuery: ''
         });   
@@ -71,7 +72,7 @@ class SearchTrack extends Component {
             .then((responseData)=> {
 				console.log(responseData.browse)
                 this.setState({
-                    dataSource: this.state.dataSource.cloneWithRows(responseData.browse.slice(0, 15)),
+                    dataSource: this.state.dataSource.cloneWithRows(responseData.browse),
                     resultsCount: responseData.browse.length,
                     responseData: responseData.browse,
                     filteredItems: responseData.browse,
@@ -90,10 +91,252 @@ class SearchTrack extends Component {
             });
     }
 	
+    getAllItems() {
+		this.setState({
+			serverError: false,
+            resultsCount: 0,
+            recordsCount: 10,
+            positionY: 0,
+			searchQuery: ''
+        });   
+		let items = [];
+		
+		fetch(appConfig.url + 'jobs/1?token=' + appConfig.access_token, {
+            method: 'get',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((response)=> response.json())
+            .then((responseData)=> {
+				
+				items.push(...responseData.browse);
+				this.setState({
+					resultsCount: items.length
+				});
+				if (responseData.browse.length > 0) {
+						fetch(appConfig.url + 'jobs/2?token=' + appConfig.access_token, {
+							method: 'get',
+							headers: {
+								'Accept': 'application/json',
+								'Content-Type': 'application/json'
+							}
+						})
+							.then((response)=> response.json())
+							.then((responseData)=> {
+
+								items.push(...responseData.browse);
+								this.setState({
+									resultsCount: items.length
+								});
+								if (responseData.browse.length > 0) {
+										fetch(appConfig.url + 'jobs/3?token=' + appConfig.access_token, {
+											method: 'get',
+											headers: {
+												'Accept': 'application/json',
+												'Content-Type': 'application/json'
+											}
+										})
+											.then((response)=> response.json())
+											.then((responseData)=> {
+
+												items.push(...responseData.browse); 
+												this.setState({
+													resultsCount: items.length
+												});
+												if (responseData.browse.length > 0) {
+														fetch(appConfig.url + 'jobs/4?token=' + appConfig.access_token, {
+															method: 'get',
+															headers: {
+																'Accept': 'application/json',
+																'Content-Type': 'application/json'
+															}
+														})
+															.then((response)=> response.json())
+															.then((responseData)=> {
+
+																items.push(...responseData.browse); 
+																this.setState({
+																	resultsCount: items.length
+																}); 
+																if (responseData.browse.length > 0) {
+																		fetch(appConfig.url + 'jobs/5?token=' + appConfig.access_token, {
+																			method: 'get',
+																			headers: {
+																				'Accept': 'application/json',
+																				'Content-Type': 'application/json'
+																			}
+																		})
+																			.then((response)=> response.json())
+																			.then((responseData)=> {
+
+																				items.push(...responseData.browse);
+																				this.setState({
+																					resultsCount: items.length
+																				}); 
+																				if (responseData.browse.length > 0) {
+																						fetch(appConfig.url + 'jobs/6?token=' + appConfig.access_token, {
+																							method: 'get',
+																							headers: {
+																								'Accept': 'application/json',
+																								'Content-Type': 'application/json'
+																							}
+																						})
+																							.then((response)=> response.json())
+																							.then((responseData)=> {
+																								
+																								items.push(...responseData.browse); 
+																								this.setState({
+																									resultsCount: items.length
+																								});  
+																								if (responseData.browse.length > 0) {
+																										fetch(appConfig.url + 'jobs/7?token=' + appConfig.access_token, {
+																											method: 'get',
+																											headers: {
+																												'Accept': 'application/json',
+																												'Content-Type': 'application/json'
+																											}
+																										})
+																											.then((response)=> response.json())
+																											.then((responseData)=> {
+																												
+																												items.push(...responseData.browse); 
+																												this.setState({
+																													resultsCount: items.length
+																												}); 
+																												if (responseData.browse.length > 0) {
+																														fetch(appConfig.url + 'jobs/8?token=' + appConfig.access_token, {
+																															method: 'get',
+																															headers: {
+																																'Accept': 'application/json',
+																																'Content-Type': 'application/json'
+																															}
+																														})
+																															.then((response)=> response.json())
+																															.then((responseData)=> {
+
+																																items.push(...responseData.browse); 
+																																this.setState({
+																																	resultsCount: items.length
+																																});  
+																																if (responseData.browse.length > 0) {
+																																		fetch(appConfig.url + 'jobs/9?token=' + appConfig.access_token, {
+																																			method: 'get',
+																																			headers: {
+																																				'Accept': 'application/json',
+																																				'Content-Type': 'application/json'
+																																			}
+																																		})
+																																			.then((response)=> response.json())
+																																			.then((responseData)=> {
+
+																																				items.push(...responseData.browse);
+																																				this.setState({
+																																					resultsCount: items.length
+																																				});
+																																				if (responseData.browse.length > 0) {
+																																						fetch(appConfig.url + 'jobs/10?token=' + appConfig.access_token, {
+																																							method: 'get',
+																																							headers: {
+																																								'Accept': 'application/json',
+																																								'Content-Type': 'application/json'
+																																							}
+																																						})
+																																							.then((response)=> response.json())
+																																							.then((responseData)=> {
+
+																																								if (responseData.browse.length > 0) {
+																																									items.push(...responseData.browse); 
+																																									this.setState({
+																																										resultsCount: items.length
+																																									}); 
+																																								}
+																																							})
+																																							.catch((error)=> {
+																																								this.setState({
+																																									serverError: true
+																																								});
+																																							})
+																																				}
+																																			})
+																																			.catch((error)=> {
+																																				this.setState({
+																																					serverError: true
+																																				});
+																																			})
+																																}
+																															})
+																															.catch((error)=> {
+																																this.setState({
+																																	serverError: true
+																																});
+																															})
+																												}
+																											})
+																											.catch((error)=> {
+																												this.setState({
+																													serverError: true
+																												});
+																											})
+																								}
+																							})
+																							.catch((error)=> {
+																								this.setState({
+																									serverError: true
+																								});
+																							})
+																				}
+																			})
+																			.catch((error)=> {
+																				this.setState({
+																					serverError: true
+																				});
+																			})
+																}
+															})
+															.catch((error)=> {
+																this.setState({
+																	serverError: true
+																});
+															})
+												}
+											})
+											.catch((error)=> {
+												this.setState({
+													serverError: true
+												});
+											})
+								}
+							})
+							.catch((error)=> {
+								this.setState({
+									serverError: true
+								});
+							})
+				}	
+			})
+            .catch((error)=> {
+                this.setState({
+                    serverError: true
+                });
+            })
+            .finally(()=> {
+				this.setState({
+					dataSource: this.state.dataSource.cloneWithRows(items),
+					resultsCount: items.length,
+					responseData: items,
+					filteredItems: items,
+					refreshing: false,
+					showProgress: false
+				});
+            });
+    }
+	
     pressRow(rowData) {
 		let data = {
 			trackId: rowData.id,
-			image: 'https://res.cloudinary.com/chris-mackie/image/upload/' + rowData.company_img,
+			image: 'https://res.cloudinary.com/chris-mackie/image/upload/c_fill,co_rgb:555860,h_150,w_253/v' + rowData.company_img_v + '/' + rowData.company_img,
 			role: rowData.role,
 			company: rowData.company,
 			job_term: rowData.job_term,
@@ -126,7 +369,7 @@ class SearchTrack extends Component {
             >
                 <View style={styles.imgsList}>
                      <Image
-                        source={{uri: 'https://res.cloudinary.com/chris-mackie/image/upload/' + rowData.company_img}}
+                        source={{uri: 'https://res.cloudinary.com/chris-mackie/image/upload/c_fill,co_rgb:555860,h_150,w_253/v' + rowData.company_img_v + '/' + rowData.company_img}}
                         style={styles.img}
                     />
                     <View style={styles.textBlock}>
@@ -134,6 +377,9 @@ class SearchTrack extends Component {
 							{rowData.role}
 						</Text>
  												
+                        <Text style={styles.textItemBig}>
+							{rowData.company_img_v}
+						</Text>  												
                         <Text style={styles.textItemBig}>
 							{rowData.company}
 						</Text> 
@@ -203,7 +449,8 @@ class SearchTrack extends Component {
 		});
 
 		setTimeout(() => {
-			this.getItems()
+			this.getItems();
+			this.getAllItems();
 		}, 300);
 	}
 	
