@@ -92,14 +92,17 @@ class SearchTrack extends Component {
 	
     pressRow(rowData) {
 		let data = {
-			trackId: rowData.trackId,
-			name: rowData.trackName,
-			image: rowData.artworkUrl100.replace('100x100bb.jpg', '500x500bb.jpg'),
-			date: rowData.releaseDate.split('-')[0],
-			artist: rowData.artist,
-			album: rowData.album,
-			duration: rowData.duration,
-			url: rowData.url
+			trackId: rowData.id,
+			image: 'https://res.cloudinary.com/chris-mackie/image/upload/' + rowData.company_img,
+			role: rowData.role,
+			company: rowData.company,
+			job_term: rowData.job_term,
+			company_type: rowData.company_type,
+			location_city: rowData.location_city.trim(),
+			rate: rowData.rate,
+			
+			date: rowData.posted,
+			full_description: rowData.full_description
 		};
 		
 		this.props.navigator.push({

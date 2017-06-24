@@ -28,27 +28,30 @@ class SearchDetails extends Component {
 		});
 		
 		this.state = {
-			name: '',
-			date: '',
-			artist: '',
-			album: '',
-			duration: '',
-			url: ''
+			role: ''
 		};
 		
 		if (props.data) {
+			let job_term;
+			if (props.data.job_term == 'ft') {
+				job_term = 'Full-Time';
+			} else {
+				job_term = 'Part-Time';
+			}
 			this.state = {
-				name: props.data.name,
-				date: props.data.date,
 				image: props.data.image,
-				artist: props.data.artist,
-				album: props.data.album,
-				duration: props.data.duration,
-				url: props.data.url
+				role: props.data.role,
+				date: props.data.date,
+				company: props.data.company,
+				job_term: job_term,
+				company_type: props.data.company_type,
+				location_city: props.data.location_city,
+				rate: props.data.rate,
+				full_description: props.data.full_description
 			};
 		}	
     }
-	
+			
 	addItem() {
         let movies = [];
 
@@ -114,7 +117,7 @@ class SearchDetails extends Component {
 					<View>
 						<TouchableHighlight
 							onPress={()=> this.goBack()}
-							underlayColor='#48BBEC'
+							underlayColor='#E25057'
 						>
 							<Text style={styles.textSmall}>
 								Back
@@ -126,17 +129,17 @@ class SearchDetails extends Component {
 							underlayColor='#ddd'
 						>
 							<Text style={styles.textLarge}>
-								{this.state.name}
+								{this.state.company}
 							</Text>
 						</TouchableHighlight>	
 					</View>						
 					<View>
 						<TouchableHighlight
 							onPress={()=> this.addItem()}
-							underlayColor='#48BBEC'
+							underlayColor='#E25057'
 						>
 							<Text style={styles.textSmall}>
-								Add
+								Apply
 							</Text>
 						</TouchableHighlight>	
 					</View>
@@ -157,18 +160,42 @@ class SearchDetails extends Component {
 					</View>
 					 
 						<Text style={styles.itemTextBold}>
-							{this.state.name}
+							{this.state.company}
 						</Text>
 						
-						<Text style={styles.itemTextBold}>
+						<Text style={styles.itemTextBig}>
+							{this.state.role}
+						</Text>				
+						
+						<Text style={styles.itemText}>
+							{this.state.job_term}
+						</Text>				
+						
+						<Text style={styles.itemText}>
+							{this.state.company_type}
+						</Text>						
+						
+						<Text style={styles.itemText}>
+							{this.state.location_city}
+						</Text>				
+						
+						<Text style={styles.itemText}>
 							{this.state.date}
+						</Text>						
+						
+						<Text style={styles.itemTextBold}>
+							£{this.state.rate}
 						</Text>
-
+						
+						<Text style={styles.itemTextDescription}>
+							{this.state.full_description}
+						</Text>				
+						
 						<TouchableHighlight
-							onPress={()=> this.playTrack()}
+							onPress={()=> this.addItem()}
 							style={styles.button}>
 							<Text style={styles.buttonText}>
-								Show post
+								Apply Now
 							</Text>
 						</TouchableHighlight>
 						
@@ -188,7 +215,8 @@ const styles = StyleSheet.create({
 	header: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		backgroundColor: '#48BBEC',
+		//backgroundColor: '#48BBEC',
+		backgroundColor: '#E25057',
 		borderWidth: 0,
 		borderColor: 'whitesmoke'
 	},	
@@ -226,16 +254,29 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
 		color: 'black'
     },
+	itemTextBig: {
+		fontSize: 18,
+		marginBottom: 5,
+		textAlign: 'center',
+		color: 'black'
+    },	
     itemText: {
         fontSize: 14,
         textAlign: 'center',
-        margin: 3,
+        margin: 1,
+        color: 'black'
+    },    
+	itemTextDescription: {
+        fontSize: 14,
+        textAlign: 'left',
+        margin: 5,
         marginLeft: 2,
         color: 'black'
     },
     button: {
         height: 50,
-        backgroundColor: '#48BBEC',
+        //backgroundColor: '#48BBEC',
+        backgroundColor: '#E25057',
         borderColor: '#48BBEC',
         alignSelf: 'stretch',
         marginTop: 10,
