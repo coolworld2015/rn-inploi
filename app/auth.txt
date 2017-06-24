@@ -1,3 +1,5 @@
+https://www.inploi.me/jobs
+
 https://test.inploi.me/token
 
 client_id = anton.osypa@daxx-staffing.com

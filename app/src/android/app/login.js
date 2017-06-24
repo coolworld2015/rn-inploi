@@ -100,12 +100,12 @@ class Login extends Component {
 
                     <View style={styles.headerContainer}>
                         <Text style={styles.heading}>
-                            RN-Inploi
+                             
                         </Text>
                     </View>
 					
 					<Image style={styles.logo}
-                           source={require('../../../img/inploi.png')}
+                           source={require('../../../img/logo.png')}
                     />
 					
                     <TextInput
@@ -166,6 +166,7 @@ class Login extends Component {
                     <ActivityIndicator
                         animating={this.state.showProgress}
                         size="large"
+						color="#E25057"
                         style={styles.loader}
                     />
 
@@ -188,7 +189,7 @@ const styles = StyleSheet.create({
         flex: 1
     },
     logo: {
-        width: 150,
+        width: 300,
         height: 150,
         paddingTop: 140,
         borderRadius: 20,
@@ -203,13 +204,14 @@ const styles = StyleSheet.create({
     heading: {
         fontSize: 30,
         marginTop: 10,
-        color: 'black',
+        color: '#E25057',
         fontWeight: 'bold',
         textAlign: 'center'
     },
     button: {
         height: 50,
-        backgroundColor: '#48BBEC',
+        //backgroundColor: '#48BBEC',
+        backgroundColor: '#E25057',
         borderColor: '#48BBEC',
         alignSelf: 'stretch',
         marginTop: 20,

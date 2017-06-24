@@ -11,13 +11,15 @@ import {
     ScrollView,
     ActivityIndicator,
     TextInput,
-	BackAndroid,
+    AsyncStorage,
+    Alert,
 	Image,
 	Dimensions,
-	RefreshControl	
+	RefreshControl,
+	BackAndroid
 } from 'react-native';
 
-class SearchTrack extends Component {
+class Movies extends Component {
     constructor(props) {
         super(props);
 		
@@ -26,22 +28,22 @@ class SearchTrack extends Component {
 				this.props.navigator.pop();
 			}
 			return true;
-		});	
+		});
 		
         var ds = new ListView.DataSource({
             rowHasChanged: (r1, r2) => r1 != r2
         });
 
-		this.state = {
-			dataSource: ds.cloneWithRows([]),
-			searchQueryHttp: 'star',
+        this.state = {
+            dataSource: ds.cloneWithRows([]),
+            showProgress: true,
+            resultsCount: 0,
+            recordsCount: 15,
+            positionY: 0,
 			searchQuery: '',
-			showProgress: true,
-			resultsCount: 0,
-			recordsCount: 15,
-			positionY: 0,
 			refreshing: false
-		}	
+        };
+
     }
 	
     componentDidMount() {
@@ -51,51 +53,67 @@ class SearchTrack extends Component {
         this.getItems();
     }
 	
-    getItems() {
+    componentWillUpdate() {
+        if (appConfig.movies.refresh) {
+            appConfig.movies.refresh = false;
+
+            this.setState({
+                showProgress: true
+            });
+
+			setTimeout(() => {
+				this.getItems()
+			}, 300);
+        }
+    }	
+	
+	getItems() {
 		this.setState({
 			serverError: false,
             resultsCount: 0,
             recordsCount: 15,
             positionY: 0,
 			searchQuery: ''
-        });   
-			
-		fetch(appConfig.url + 'jobs/1?token=' + appConfig.access_token, {
-            method: 'get',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        })
-            .then((response)=> response.json())
-            .then((responseData)=> {
-				console.log(responseData.browse)
-                this.setState({
-                    dataSource: this.state.dataSource.cloneWithRows(responseData.browse.slice(0, 15)),
-                    resultsCount: responseData.browse.length,
-                    responseData: responseData.browse,
-                    filteredItems: responseData.browse,
-					refreshing: false
-                });
+        });
+		
+        AsyncStorage.getItem('rn-wikr.posts')
+            .then(req => JSON.parse(req))
+            .then(json => {
+				if (json) {
+					this.setState({
+						dataSource: this.state.dataSource.cloneWithRows(json.sort(this.sort).slice(0, 15)),
+						resultsCount: json.length,
+						responseData: json.sort(this.sort),
+						filteredItems: json.sort(this.sort),
+						refreshing: false
+					});
+				}
             })
-            .catch((error)=> {
-                this.setState({
-                    serverError: true
-                });
-            })
+            .catch(error => console.log(error))
             .finally(()=> {
                 this.setState({
                     showProgress: false
                 });
             });
     }
-	
+
+    sort(a, b) {
+        var nameA = a.name.toLowerCase(), nameB = b.name.toLowerCase();
+        if (nameA < nameB) {
+            return -1
+        }
+        if (nameA > nameB) {
+            return 1
+        }
+        return 0;
+    }
+
     pressRow(rowData) {
 		let data = {
 			trackId: rowData.trackId,
-			name: rowData.trackName,
-			image: rowData.artworkUrl100.replace('100x100bb.jpg', '500x500bb.jpg'),
-			date: rowData.releaseDate.split('-')[0],
+			name: rowData.name,
+			date: rowData.date,
+			image: rowData.image,
 			artist: rowData.artist,
 			album: rowData.album,
 			duration: rowData.duration,
@@ -107,14 +125,14 @@ class SearchTrack extends Component {
 			data: data
 		});
     }
-	
+
     renderRow(rowData) {
-		let job_term;
-		if (rowData.job_term == 'ft') {
-            job_term = 'Full-Time';
-        } else {
-			job_term = 'Part-Time';
-		}
+		var image;
+ 
+		image = <Image
+			source={{uri: rowData.image}}
+			style={styles.img}
+		/>
 		
         return (
             <TouchableHighlight
@@ -122,40 +140,24 @@ class SearchTrack extends Component {
                 underlayColor='#ddd'
             >
                 <View style={styles.imgsList}>
-                     <Image
-                        source={{uri: 'https://res.cloudinary.com/chris-mackie/image/upload/' + rowData.company_img}}
-                        style={styles.img}
-                    />
+ 
+					{image}
+ 
                     <View style={styles.textBlock}>
                         <Text style={styles.textItemBold}>
-							{rowData.role}
-						</Text>
- 												
-                        <Text style={styles.textItemBig}>
-							{rowData.company}
-						</Text> 
-
-                        <Text style={styles.textItem}>
-							{job_term}
-						</Text>
+							{rowData.name}
+						</Text>                           
 						
-                        <Text style={styles.textItem}>
-							{rowData.company_type}
-						</Text>
- 						
-                        <Text style={styles.textItem}>
-							{rowData.location_city.trim()}
-						</Text> 
-												
-                        <Text style={styles.textItemBold}>
-							£{rowData.rate}
-						</Text>
+						<Text style={styles.textItemBold}>
+							{rowData.date}
+						</Text>                        
+
                     </View>
                 </View>
             </TouchableHighlight>
         );
     }
-
+	
     refreshData(event) {
         if (this.state.showProgress === true) {
             return;
@@ -184,7 +186,7 @@ class SearchTrack extends Component {
             return;
         }
         var arr = [].concat(this.state.responseData);
-        var items = arr.filter((el) => el.role.toLowerCase().indexOf(text.toLowerCase()) >= 0);
+        var items = arr.filter((el) => el.name.toLowerCase().indexOf(text.toLowerCase()) >= 0);
         this.setState({
             dataSource: this.state.dataSource.cloneWithRows(items),
             resultsCount: items.length,
@@ -192,11 +194,10 @@ class SearchTrack extends Component {
             searchQuery: text
         })
     }
-
+	
 	refreshDataAndroid() {
 		this.setState({
-			showProgress: true,
-			resultsCount: 0
+			showProgress: true
 		});
 
 		setTimeout(() => {
@@ -204,11 +205,7 @@ class SearchTrack extends Component {
 		}, 300);
 	}
 	
-    goBack(rowData) {
-		this.props.navigator.pop();
-	}
-
-    clearSearchQuery() {
+	clearSearchQuery() {
         this.setState({
             dataSource: this.state.dataSource.cloneWithRows(this.state.responseData.slice(0, 15)),
             resultsCount: this.state.responseData.length,
@@ -232,7 +229,6 @@ class SearchTrack extends Component {
             loader = <View style={styles.loader}>
                 <ActivityIndicator
                     size="large"
-					color="#E25057"
                     animating={true}
                 />
             </View>;
@@ -267,7 +263,7 @@ class SearchTrack extends Component {
 							underlayColor='#ddd'
 						>
 							<Text style={styles.textLarge}>
-								Jobs
+								Favorites
 							</Text>
 						</TouchableHighlight>	
 					</View>						
@@ -280,7 +276,7 @@ class SearchTrack extends Component {
 						</TouchableHighlight>	
 					</View>
 				</View>
-				
+			
                 <View style={styles.iconForm}>
 					<View>
 						<TextInput
@@ -360,7 +356,7 @@ const styles = StyleSheet.create({
     },
 	iconForm: {
 		flexDirection: 'row',
-		borderColor: '#E25057',
+		borderColor: 'lightgray',
 		borderWidth: 3
 	},
     countHeader: {
@@ -370,8 +366,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#F5FCFF',
     },
     img: {
-        height: 110,
-        width: 110,
+        height: 95,
+        width: 90,
         borderRadius: 10,
         margin: 10
     },    
@@ -383,14 +379,9 @@ const styles = StyleSheet.create({
 	textItemBold: {
 		fontWeight: 'bold', 
 		color: 'black'
-    },		
-	textItemBig: {
-		color: 'black',
-		marginBottom: 5
     },	
 	textItem: {
-		color: 'black',
-		fontSize: 12
+		color: 'black'
     },
 	container: {
 		flex: 1, 
@@ -400,8 +391,7 @@ const styles = StyleSheet.create({
 	header: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		//backgroundColor: '#48BBEC',
-		backgroundColor: '#E25057',
+		backgroundColor: '#48BBEC',
 		borderWidth: 0,
 		borderColor: 'whitesmoke'
 	},	
@@ -428,12 +418,7 @@ const styles = StyleSheet.create({
 		borderWidth: 3,
 		borderColor: 'lightgray',
 		borderRadius: 0
-	},
-	itemWrap: {
-		flex: 1,
-		flexDirection: 'column', 
-		flexWrap: 'wrap'
-    },	
+	},		
 	row: {
 		flex: 1,
 		flexDirection: 'row',
@@ -453,8 +438,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         padding: 10,
         borderColor: '#D7D7D7',
-        //backgroundColor: '#48BBEC',
-        backgroundColor: '#E25057',
+        backgroundColor: '#48BBEC',
 		color: 'white',
 		fontWeight: 'bold'
     },
@@ -469,4 +453,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default SearchTrack;
+export default Movies;

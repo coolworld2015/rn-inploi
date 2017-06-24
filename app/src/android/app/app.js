@@ -29,12 +29,9 @@ class App extends Component {
             access_token: '',
 			url: 'https://test.inploi.me/',
 			onLogOut: this.onLogOut.bind(this),
-			users: {
+			movies: {
                 refresh: false
-            },
-			phones: {
-                refresh: false
-            }	
+            }
         };		
     }
 
