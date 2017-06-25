@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
         flex: 1
     },
     logo: {
-        width: 300,
+        width: 250,
         height: 150,
         paddingTop: 140,
         borderRadius: 20,

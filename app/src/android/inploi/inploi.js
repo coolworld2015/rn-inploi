@@ -34,7 +34,6 @@ class SearchTrack extends Component {
 
 		this.state = {
 			dataSource: ds.cloneWithRows([]),
-			searchQueryHttp: 'star',
 			searchQuery: '',
 			showProgress: true,
 			resultsCount: 0,
@@ -48,7 +47,6 @@ class SearchTrack extends Component {
 		this.setState({
             width: Dimensions.get('window').width
         });
-        //this.getItems();
         this.getAllItems();
     }
 	
@@ -449,7 +447,6 @@ class SearchTrack extends Component {
 		});
 
 		setTimeout(() => {
-			this.getItems();
 			this.getAllItems();
 		}, 300);
 	}
@@ -464,7 +461,7 @@ class SearchTrack extends Component {
             resultsCount: this.state.responseData.length,
             filteredItems: this.state.responseData,
             positionY: 0,
-            recordsCount: 15,
+            recordsCount: 10,
             searchQuery: ''
         });
     }
