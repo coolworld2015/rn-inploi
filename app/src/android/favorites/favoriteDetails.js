@@ -126,6 +126,9 @@ class MoviesDetails extends Component {
 			}}
 		/>;
 		
+		start = this.state.start;
+		end = this.state.end;
+		
 		if (this.state.start == null) {
             start = 'N/A';
         }
