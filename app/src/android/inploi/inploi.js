@@ -343,7 +343,16 @@ class SearchTrack extends Component {
 			rate: rowData.rate,
 			
 			date: rowData.posted,
-			full_description: rowData.full_description
+			full_description: rowData.full_description,
+			key_skills: rowData.key_skills.replace(/,/g , ', '),
+			experience: rowData.experience,
+			address: rowData.address,
+			postcode: rowData.postcode,
+			latitude: rowData.latitude,
+			longitude: rowData.longitude,
+			start: rowData.dates[0].start,
+			end: rowData.dates[0].end,
+			asap: rowData.dates[0].asap,
 		};
 		
 		this.props.navigator.push({

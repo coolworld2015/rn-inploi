@@ -10,6 +10,8 @@ import InploiDetails from '../inploi/inploiDetails';
 import Favorites from '../favorites/favorites';
 import FavoriteDetails from '../favorites/favoriteDetails';
 
+import ShowMap from './showMap';
+
 class AppContainer extends Component {
     constructor(props) {
         super(props);
@@ -50,7 +52,9 @@ class InploiTab extends Component {
 			case 0: return <Inploi data={route.data} routes={this.routes} navigator={navigator} />
 					break;
 			case 1: return <InploiDetails data={route.data} routes={this.routes} navigator={navigator} />
-					break;				
+					break;		
+			case 3: return <ShowMap data={route.data} routes={this.routes} navigator={navigator} />
+					break;					
  		}
  	}	
 	
@@ -84,6 +88,8 @@ class FavoritesTab extends Component {
 					break;			
 			case 1: return <FavoriteDetails data={route.data} routes={this.routes} navigator={navigator} />
 					break;
+			case 3: return <ShowMap data={route.data} routes={this.routes} navigator={navigator} />
+					break;					
  		}
  	}	
 	

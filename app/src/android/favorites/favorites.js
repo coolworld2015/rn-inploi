@@ -118,9 +118,18 @@ class Movies extends Component {
 			company_type: rowData.company_type,
 			location_city: rowData.location_city.trim(),
 			rate: rowData.rate,
-			
 			date: rowData.date,
-			full_description: rowData.full_description
+			full_description: rowData.full_description,
+			
+			key_skills: rowData.key_skills,
+			experience: rowData.experience,
+			address: rowData.address,
+			postcode: rowData.postcode,
+			latitude: rowData.latitude,
+			longitude: rowData.longitude,
+			start: rowData.start,
+			end: rowData.end,
+			asap: rowData.asap
 		};
 		
 		this.props.navigator.push({

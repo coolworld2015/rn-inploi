@@ -41,7 +41,17 @@ class MoviesDetails extends Component {
 				company_type: props.data.company_type,
 				location_city: props.data.location_city,
 				rate: props.data.rate,
-				full_description: props.data.full_description
+				full_description: props.data.full_description,
+				
+				key_skills: props.data.key_skills,
+				experience: props.data.experience,
+				address: props.data.address,
+				postcode: props.data.postcode,
+				latitude: props.data.latitude,
+				longitude: props.data.longitude,
+				start: props.data.start,
+				end: props.data.end,
+				asap: props.data.asap
 			};
 		}	
     }
@@ -89,11 +99,12 @@ class MoviesDetails extends Component {
 			.catch(error => console.log(error))
 	}
 	
-    playTrack() {
+    showMap() {
 		this.props.navigator.push({
-			index: 2,
+			index: 3,
 			data: {
-				url: this.state.url
+				latitude: this.state.latitude,
+				longitude: this.state.longitude
 			}
 		});
     }
@@ -103,7 +114,7 @@ class MoviesDetails extends Component {
 	}
 	
     render() {
-        var image;
+        var image, start, end;
  
 		image = <Image
 			source={{uri: this.state.image}}
@@ -114,6 +125,17 @@ class MoviesDetails extends Component {
 				margin: 5
 			}}
 		/>;
+		
+		if (this.state.start == null) {
+            start = 'N/A';
+        }
+		if (this.state.end == null) {
+            end = 'N/A';
+        }
+		if (this.state.asap == '1') {
+            start = 'ASAP';
+			end = 'N/A';
+        }
 		
         return (
             <View style={styles.container}>
@@ -194,6 +216,49 @@ class MoviesDetails extends Component {
 						<Text style={styles.itemTextDescription}>
 							{this.state.full_description}
 						</Text>				
+												
+						<Text style={styles.itemHeaderBold}>
+							Location
+						</Text>												
+						<TouchableHighlight
+							onPress={()=> this.showMap()}
+							style={styles.button}>
+							<Text style={styles.buttonText}>
+								{this.state.address} {this.state.postcode}
+							</Text>
+						</TouchableHighlight>		
+						
+						<Text style={styles.itemHeaderBold}>
+							Required Skills
+						</Text>												
+						<Text style={styles.itemTextDescription}>
+							{this.state.key_skills}
+						</Text>				
+						
+						<Text style={styles.itemHeaderBold}>
+							Experience
+						</Text>				
+						<Text style={styles.itemTextDescription}>
+							{this.state.experience}
+						</Text>			
+						
+						<Text style={styles.itemHeaderBold}>
+							Dates
+						</Text>				
+						<Text style={styles.itemTextDescription}>
+							Start Date: {start}
+						</Text>						
+						<Text style={styles.itemTextEnd}>
+							End Date: {end}
+						</Text>
+						
+						<TouchableHighlight
+							onPress={()=> this.addItem()}
+							style={styles.button}>
+							<Text style={styles.buttonText}>
+								Apply Now
+							</Text>
+						</TouchableHighlight>			
 						
 					</View>
 				</ScrollView>
@@ -249,6 +314,14 @@ const styles = StyleSheet.create({
         margin: 5,
         fontWeight: 'bold',
 		color: 'black'
+    },    
+	itemHeaderBold: {
+        fontSize: 18,
+        textAlign: 'center',
+        marginTop: 5,
+        marginBottom: -5,
+        fontWeight: 'bold',
+		color: 'black'
     },
 	itemTextBig: {
 		fontSize: 18,
@@ -268,6 +341,13 @@ const styles = StyleSheet.create({
         margin: 5,
         marginLeft: 2,
         color: 'black'
+    },	
+	itemTextEnd: {
+        fontSize: 14,
+        textAlign: 'left',
+        margin: 0,
+        marginLeft: 2,
+        color: 'black'
     },
     button: {
         height: 50,
@@ -276,6 +356,7 @@ const styles = StyleSheet.create({
         borderColor: '#48BBEC',
         alignSelf: 'stretch',
         marginTop: 10,
+        marginBottom: 10,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 5
