@@ -30,8 +30,8 @@ class AppContainer extends Component {
  					underlineStyle={{backgroundColor: '#E25057'}}
 					backgroundColor='white'/>}
             >
-                <InploiTab tabLabel="Jobs"/>
                 <FavoritesTab tabLabel="Applied"/>
+                <InploiTab tabLabel="Jobs"/>
                 <Logout tabLabel="Logout"/>
             </ScrollableTabView>
         );

@@ -154,7 +154,7 @@ class Login extends Component {
                     </TextInput>
 
                     <TouchableHighlight
-                        onPress={() => this.onLogin()}
+                        onPress={() => this.onLoginPressed()}
                         style={styles.button}>
                         <Text style={styles.buttonText}>
                             Log in
